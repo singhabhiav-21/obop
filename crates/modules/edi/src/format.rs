@@ -1,6 +1,8 @@
 //! The syntax-independent face of an e-invoice format (docs/LOCALIZATION.md 2.3: `DocFormat { id,
 //! version, build, parse, validate }`; docs/ARCHITECTURE.md, the E-invoicing row). XRechnung-UBL,
-//! XRechnung-CII, Peppol BIS Billing 3.0 and ZUGFeRD / Factur-X each implement it; none does yet.
+//! XRechnung-CII, Peppol BIS Billing 3.0 and ZUGFeRD / Factur-X each implement it. So far only
+//! [`crate::UblFormat`] does, and its `parse` answers [`ParseError::Incomplete`] until it reads a
+//! whole invoice.
 //! `EDocTransport` (send, poll, receive, cancel) comes with the first transport.
 
 use crate::detect::{DetectError, Syntax};
@@ -42,6 +44,14 @@ pub enum ParseError {
         value: String,
         reason: String,
     },
+    /// The document was read as far as the format's reader goes, but the reader does not yet read
+    /// everything an [`Invoice`] requires, so no invoice is made up from part of it.
+    Incomplete {
+        /// The format's id, such as `ubl`.
+        format: &'static str,
+        /// What it does not read yet, such as `BG-4, BG-7 and BG-22`.
+        missing: &'static str,
+    },
 }
 
 impl fmt::Display for ParseError {
@@ -57,6 +67,10 @@ impl fmt::Display for ParseError {
                 value,
                 reason,
             } => write!(f, "{term} {value:?}: {reason}"),
+            Self::Incomplete { format, missing } => write!(
+                f,
+                "the {format} reader is incomplete: it does not read {missing} yet"
+            ),
         }
     }
 }

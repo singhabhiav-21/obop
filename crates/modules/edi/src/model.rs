@@ -267,6 +267,28 @@ pub struct Totals {
     pub payable: Money,
 }
 
+/// The document header of an invoice or credit note: what a reader takes from the top of the
+/// document before the parties, lines and totals. The terms mean the same as on [`Invoice`].
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Header {
+    /// BT-1.
+    pub number: String,
+    /// BT-2.
+    pub issue_date: Date,
+    /// BT-3 (UNTDID 1001).
+    pub type_code: String,
+    /// BT-5.
+    pub currency: Currency,
+    /// BT-9.
+    pub due_date: Option<Date>,
+    /// BT-10.
+    pub buyer_reference: Option<String>,
+    /// BT-24.
+    pub specification_id: String,
+    /// BG-3.
+    pub preceding: Vec<PrecedingInvoice>,
+}
+
 /// An invoice or credit note in EN 16931 terms.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Invoice {
