@@ -43,6 +43,11 @@ crm = { path = "crates/modules/crm" }
 product = { path = "crates/modules/product" }
 connectors = { path = "crates/modules/connectors" }
 mileage = { path = "crates/modules/mileage" }
+edi = { path = "crates/modules/edi" }
+# Third-party crates first used by `edi`, pinned exactly as D23 asks for pre-1.0 crates (docs/DECISIONS.md
+# section 1.1). `jiff` is the version `obop-values` already uses; `edi` takes only its civil date.
+roxmltree = "=0.21.2"
+jiff = { version = "=0.2.38", default-features = false, features = ["std"] }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

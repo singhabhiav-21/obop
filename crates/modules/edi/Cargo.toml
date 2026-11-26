@@ -1,0 +1,19 @@
+[package]
+name = "edi"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+obop-values.workspace = true
+roxmltree.workspace = true
+jiff.workspace = true
+
+[dev-dependencies]
+serde_json = "1"
+
+[lints]
+workspace = true
